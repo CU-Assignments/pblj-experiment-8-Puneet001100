@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+</head>
+<body>
+    <h2>Login</h2>
+    <form action="login" method="post">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required /><br/><br/>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required /><br/><br/>
+        <input type="submit" value="Login" />
+    </form>
+</body>
+</html>
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
+    
+    private static final long serialVersionUID = 1L;
+    
+    // Handle POST requests (form submissions)
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        // Set the content type of the response
+        response.setContentType("text/html");
+        
+        // Get the PrintWriter to write the response
+        PrintWriter out = response.getWriter();
+        
+        // Retrieve user credentials from the request
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        
+        // Basic authentication logic (hardcoded credentials for demonstration)
+        if("admin".equals(username) && "admin123".equals(password)) {
+            // Successful login; display welcome message
+            out.println("<!DOCTYPE html>");
+            out.println("<html><head><title>Welcome</title></head><body>");
+            out.println("<h1>Welcome, " + username + "!</h1>");
+            out.println("<p>You have successfully logged in.</p>");
+            out.println("</body></html>");
+        } else {
+            // Login failed; display error message
+            out.println("<!DOCTYPE html>");
+            out.println("<html><head><title>Login Failed</title></head><body>");
+            out.println("<h1>Login Failed</h1>");
+            out.println("<p>Invalid Username or Password. Please try again.</p>");
+            out.println("</body></html>");
+        }
+        
+        // Close the writer
+        out.close();
+    }
+    
+    // Optionally, you can override doGet to forward GET requests to the login form.
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Redirect GET requests to the login page
+        response.sendRedirect("login.html");
+    }
+}
